@@ -1,69 +1,88 @@
-if (window.Telegram?.WebApp) {
-  Telegram.WebApp.ready();
-  Telegram.WebApp.expand();
-}
-
 const grid = document.getElementById('grid');
 const winText = document.getElementById('win');
+const balanceText = document.getElementById('balance');
+const betText = document.getElementById('bet');
 
-const size = 25;
-const minesCount = 3;
+let balance = 1000;
+let bet = 10;
+let minesCount = 3;
 let mines = [];
 let opened = 0;
+let gameOver = false;
 
-function generateMines() {
-  mines = [];
-  while (mines.length < minesCount) {
-    const r = Math.floor(Math.random() * size);
-    if (!mines.includes(r)) mines.push(r);
-  }
-}
+document.getElementById('betPlus').onclick = () => {
+  if (!gameOver) bet += 10;
+  betText.textContent = bet;
+};
 
-function createGrid() {
-  grid.innerHTML = '';
+document.getElementById('betMinus').onclick = () => {
+  if (!gameOver && bet > 10) bet -= 10;
+  betText.textContent = bet;
+};
+
+document.getElementById('restart').onclick = startGame;
+document.getElementById('cashout').onclick = cashOut;
+
+function startGame() {
+  if (balance < bet) return alert('Недостаточно средств');
+
+  balance -= bet;
+  balanceText.textContent = balance;
+
+  gameOver = false;
   opened = 0;
   winText.textContent = '1.00x';
-  generateMines();
 
-  for (let i = 0; i < size; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'cell';
+  grid.innerHTML = '';
+  mines = [];
 
-    btn.addEventListener('click', () => openCell(i, btn));
-    btn.addEventListener('touchstart', () => openCell(i, btn), { passive: true });
+  while (mines.length < minesCount) {
+    let r = Math.floor(Math.random() * 25);
+    if (!mines.includes(r)) mines.push(r);
+  }
 
-    grid.appendChild(btn);
+  for (let i = 0; i < 25; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.onclick = () => openCell(i, cell);
+    grid.appendChild(cell);
   }
 }
 
-function openCell(i, btn) {
-  if (btn.classList.contains('open')) return;
-  btn.classList.add('open');
+function openCell(i, cell) {
+  if (gameOver || cell.classList.contains('open')) return;
+
+  cell.classList.add('open');
 
   if (mines.includes(i)) {
-    btn.classList.add('mine');
-    alert('💥 Mine! You lost');
+    cell.classList.add('mine');
+    gameOver = true;
     revealMines();
+    setTimeout(() => alert('💥 Mine! You lost'), 200);
   } else {
-    btn.classList.add('safe');
+    cell.classList.add('safe');
     opened++;
     winText.textContent = (1 + opened * 0.2).toFixed(2) + 'x';
   }
 }
 
 function revealMines() {
-  [...grid.children].forEach((btn, i) => {
+  [...grid.children].forEach((cell, i) => {
     if (mines.includes(i)) {
-      btn.classList.add('open', 'mine');
+      cell.classList.add('mine');
     }
   });
 }
 
-function restart() {
-  createGrid();
+function cashOut() {
+  if (gameOver || opened === 0) return;
+
+  const win = Math.floor(bet * parseFloat(winText.textContent));
+  balance += win;
+  balanceText.textContent = balance;
+  gameOver = true;
 }
 
-createGrid();
 
 
 
