@@ -1,19 +1,24 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top, #0b132b, #000);
-  color: white;
+  font-family: 'Inter', Arial, sans-serif;
+  background: radial-gradient(circle at top, #141b2d 0%, #060a16 60%);
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .panel {
-  width: 320px;
+  width: 340px;
+  background: linear-gradient(180deg, #10182c, #0a0f1e);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  margin: 15px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 15px 0;
+  font-size: 14px;
 }
 
 .bet button,
@@ -41,33 +46,42 @@ body {
 .cell {
   width: 60px;
   height: 60px;
-  background: linear-gradient(145deg, #1f2f46, #121c2b);
-  border-radius: 14px;
+  background: linear-gradient(180deg, #1c2747, #0f162f);
+  border-radius: 16px;
   box-shadow:
-    inset 2px 2px 6px rgba(255,255,255,0.05),
-    inset -2px -2px 6px rgba(0,0,0,0.6),
-    0 4px 10px rgba(0,0,0,0.7);
+    inset 0 2px 4px rgba(255,255,255,0.08),
+    inset 0 -3px 6px rgba(0,0,0,0.7),
+    0 6px 18px rgba(0,0,0,0.8);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 24px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.15s ease-out;
 }
 
 .cell:hover {
-  transform: scale(1.07);
-  box-shadow: 0 0 12px rgba(0,180,255,0.6);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 0 18px rgba(0,140,255,0.6);
 }
-
+.cell:active {
+  transform: scale(0.95);
+}
 .cell.safe {
-  background: radial-gradient(circle, #4dffb3, #1fa463);
-  box-shadow: 0 0 15px rgba(77,255,179,0.8);
+  background: radial-gradient(circle at top, #3affb2, #1fa463);
+  box-shadow:
+    0 0 20px rgba(58,255,178,0.9),
+    inset 0 0 10px rgba(255,255,255,0.3);
+  animation: pop 0.2s ease-out;
 }
 
 .cell.mine {
-  background: radial-gradient(circle, #ff7b7b, #b00020);
-  box-shadow: 0 0 18px rgba(255,80,80,0.9);
+  background: radial-gradient(circle at center, #ff4d4d, #8b0000);
+  box-shadow:
+    0 0 25px rgba(255,70,70,1),
+    inset 0 0 10px rgba(255,255,255,0.3);
+  animation: boom 0.3s ease-out;
+}
 
 .mines button {
   background: #1f2f46;
@@ -81,4 +95,15 @@ body {
 
 .mines button.active {
   background: #ff9800;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes boom {
+  0% { transform: scale(0.7); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
