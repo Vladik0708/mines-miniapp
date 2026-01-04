@@ -1,10 +1,10 @@
 const grid = document.getElementById("grid");
-let minesCount = 5;
+let minesCount = 3;
 let balance = localStorage.getItem("balance")
   ? Number(localStorage.getItem("balance"))
   : 1000;
 let bet = 10;
-let multiplier = 1;
+let multiplier = 1,0 ;
 let opened = 0;
 let mines = [];
 
@@ -22,9 +22,15 @@ function startGame() {
   for (let i = 0; i < 25; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
+    cell.dataset.mine = "false";
 
     cell.addEventListener("click", () => onCellClick(cell, i));
     grid.appendChild(cell);
+    if (cell.dataset.mine === "true") {
+    cell.classList.add("mine");
+    showAllMines();
+    alert("💥 Mine! You lost");
+    return;
   }
 }
 
@@ -93,5 +99,21 @@ function calculateMultiplier(opened, minesCount) {
 
   return multiplier.toFixed(2);
 }
+let cells = document.querySelectorAll(".cell");
+let minesPlaced = 0;
 
+while (minesPlaced < minesCount) {
+    let index = Math.floor(Math.random() * cells.length);
+    if (cells[index].dataset.mine === "false") {
+        cells[index].dataset.mine = "true";
+        minesPlaced++;
+    }
+}
+function showAllMines() {
+    document.querySelectorAll(".cell").forEach(c => {
+        if (c.dataset.mine === "true") {
+            c.classList.add("mine");
+        }
+    });
+}
 
