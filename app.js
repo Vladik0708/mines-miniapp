@@ -1,86 +1,75 @@
-body {
-  background: #0f172a;
-  font-family: Arial, sans-serif;
-  color: white;
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
+const grid = document.querySelector('.grid');
+const winEl = document.getElementById('win');
+const restartBtn = document.getElementById('restart');
+
+const SIZE = 25;
+const MINES = 3;
+
+let mines = [];
+let opened = 0;
+let multiplier = 1;
+let gameOver = false;
+
+restartBtn.onclick = init;
+
+function init() {
+  grid.innerHTML = '';
+  mines = [];
+  opened = 0;
+  multiplier = 1;
+  gameOver = false;
+  winEl.textContent = '1.00x';
+
+  generateMines();
+
+  for (let i = 0; i < SIZE; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.onclick = () => openCell(i, cell);
+    grid.appendChild(cell);
+  }
 }
 
-.game {
-  width: 320px;
+function generateMines() {
+  while (mines.length < MINES) {
+    const r = Math.floor(Math.random() * SIZE);
+    if (!mines.includes(r)) mines.push(r);
+  }
 }
 
-.top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+function openCell(index, cell) {
+  if (gameOver || cell.classList.contains('open')) return;
+
+  cell.classList.add('open');
+
+  if (mines.includes(index)) {
+    cell.classList.add('mine');
+    cell.textContent = '💣';
+    gameOver = true;
+    alert('💥 Mine! You lost');
+    revealMines();
+    return;
+  }
+
+  cell.classList.add('star');
+  cell.textContent = '⭐';
+
+  opened++;
+  multiplier += 0.15;
+  winEl.textContent = multiplier.toFixed(2) + 'x';
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+function revealMines() {
+  document.querySelectorAll('.cell').forEach((cell, i) => {
+    if (mines.includes(i)) {
+      cell.classList.add('open', 'mine');
+      cell.textContent = '💣';
+    }
+  });
 }
 
-.cell {
-  width: 55px;
-  height: 55px;
-  background: #1e293b;
-  border-radius: 10px;
-  cursor: pointer;
-  position: relative;
-  transition: transform .15s;
-}
+init();
 
-.cell:hover {
-  transform: scale(1.05);
-}
-
-.cell.star {
-  background: #22c55e;
-  box-shadow: 0 0 15px #22c55e;
-}
-
-.cell.star::after {
-  content: "⭐";
-  font-size: 26px;
-  position: absolute;
-  top: 12px;
-  left: 14px;
-}
-
-.cell.mine {
-  background: #dc2626;
-  animation: explode .4s ease-out;
-}
-
-.cell.mine::after {
-  content: "💣";
-  font-size: 26px;
-  position: absolute;
-  top: 12px;
-  left: 14px;
-}
-
-@keyframes explode {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.3); }
-  100% { transform: scale(1); }
-}
-
-button {
-  margin-top: 15px;
-  width: 100%;
-  padding: 10px;
-  background: #2563eb;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  font-size: 16px;
-}
-window.onload = init;
-}
 
 
 
