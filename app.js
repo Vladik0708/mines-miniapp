@@ -1,3 +1,7 @@
+if (window.Telegram && window.Telegram.WebApp) {
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+}
 const grid = document.querySelector('.grid');
 const winEl = document.getElementById('win');
 const restartBtn = document.getElementById('restart');
@@ -34,7 +38,8 @@ function init() {
   for (let i = 0; i < SIZE; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell';
-    cell.onclick = () => openCell(i, cell);
+  cell.addEventListener('touchstart', () => openCell(i, cell), { passive: true });
+cell.addEventListener('click', () => openCell(i, cell));
     grid.appendChild(cell);
   }
 }
@@ -98,6 +103,7 @@ function revealMines() {
 }
 
 init();
+
 
 
 
