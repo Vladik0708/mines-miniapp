@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Mines</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -9,17 +10,22 @@
 
 <div class="game">
   <div class="top">
-    💣 Mines: <span id="minesCount">3</span>
-    ⭐ Win: <span id="win">1.00x</span>
-    <button id="restart">Restart</button>
+    💣 Mines: <b id="mines">3</b>
+    ⭐ Win: <b id="win">1.00x</b>
   </div>
 
-  <div class="grid"></div>
+  <div class="grid" id="grid"></div>
+
+  <div class="actions">
+    <button class="btn blue" onclick="restart()">Restart</button>
+    <button class="btn green">Cash Out</button>
+  </div>
 </div>
 
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
