@@ -1,5 +1,5 @@
 const grid = document.getElementById("grid");
-
+let minesCount = 5;
 let balance = localStorage.getItem("balance")
   ? Number(localStorage.getItem("balance"))
   : 1000;
@@ -14,7 +14,7 @@ function startGame() {
   multiplier = 1;
   opened = 0;
 
-  while (mines.length < 5) {
+  while (mines.length < minesCount) {
     const i = Math.floor(Math.random() * 25);
     if (!mines.includes(i)) mines.push(i);
   }
@@ -45,7 +45,7 @@ function onCellClick(cell, index) {
     cell.classList.add("safe");
     cell.textContent = "⭐";
     opened++;
-    multiplier += 0.3;
+   multiplier += minesCount / 10;
   }
 }
 
@@ -72,3 +72,13 @@ function updateBalance() {
 updateBalance();
 startGame();
 
+function setMines(count) {
+  minesCount = count;
+
+  document.querySelectorAll(".mines button").forEach(btn =>
+    btn.classList.remove("active")
+  );
+
+  event.target.classList.add("active");
+  startGame();
+}
