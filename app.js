@@ -36,7 +36,7 @@ function onCellClick(cell, index) {
     cell.textContent = "💣";
     balance -= bet;
    function updateBalance() {
-  document.getElementById("balance").textContent = balance;
+  document.getElementById("multiplier").textContent = multiplier ;
   localStorage.setItem("balance", balance);
 }
     alert("💥 Mine! You lost");
@@ -52,7 +52,7 @@ multiplier = calculateMultiplier(opened, minesCount);
 function changeBet(value) {
   if (bet + value > 0 && bet + value <= balance) {
     bet += value;
-    document.getElementById("bet").textContent = bet;
+    document.getElementById("multiplier").textContent = "1.00" ;
   }
 }
 
@@ -92,3 +92,4 @@ function calculateMultiplier(opened, minesCount) {
 
   return multiplier.toFixed(2);
 }
+
