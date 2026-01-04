@@ -44,8 +44,8 @@ function onCellClick(cell, index) {
   } else {
     cell.classList.add("safe");
     cell.textContent = "⭐";
-    opened++;
-   multiplier += minesCount / 10;
+  opened++;
+multiplier = calculateMultiplier(opened, minesCount);
   }
 }
 
@@ -81,4 +81,14 @@ function setMines(count) {
 
   event.target.classList.add("active");
   startGame();
+}
+function calculateMultiplier(opened, minesCount) {
+  const totalCells = 25;
+  let multiplier = 1;
+
+  for (let i = 0; i < opened; i++) {
+    multiplier *= totalCells / (totalCells - minesCount - i);
+  }
+
+  return multiplier.toFixed(2);
 }
