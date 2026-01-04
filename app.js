@@ -34,6 +34,7 @@ function onCellClick(cell, index) {
   if (mines.includes(index)) {
     cell.classList.add("mine");
     cell.textContent = "💣";
+    cell.style.pointerEvents = "none";
     balance -= bet;
    function updateBalance() {
   document.getElementById("multiplier").textContent = multiplier ;
@@ -92,4 +93,5 @@ function calculateMultiplier(opened, minesCount) {
 
   return multiplier.toFixed(2);
 }
+
 
