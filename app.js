@@ -1,96 +1,100 @@
-const grid = document.getElementById("grid");
-const coefEl = document.getElementById("coef");
-const balanceEl = document.getElementById("balance");
-const winEl = document.getElementById("win");
-const mineSelect = document.getElementById("mineSelect");
-
-let mines = 3;
-let balance = 1000;
+let balance = Number(localStorage.getItem('balance')) || 1000;
 let bet = 10;
-let started = false;
-let coef = 1;
-let gameOver = false;
-let minePositions = [];
+let mineCount = 3;
+let coef = 1.00;
+let win = 0;
 
-function setup() {
+let mines = new Set();
+let opened = new Set();
+let gameActive = false;
+
+const grid = document.getElementById("grid");
+
+function updateUI() {
+  balance = Math.floor(balance);
+  document.getElementById("balance").textContent = balance;
+  document.getElementById("bet").textContent = bet;
+  document.getElementById("coef").textContent = coef.toFixed(2);
+  document.getElementById("win").textContent = Math.floor(win);
+}
+
+function renderGrid() {
   grid.innerHTML = "";
-  gameOver = false;
-  coef = 1;
-  coefEl.textContent = coef.toFixed(2);
-  winEl.textContent = "0";
-
-  minePositions = [];
-  while (minePositions.length < mines) {
-    let r = Math.floor(Math.random() * 25);
-    if (!minePositions.includes(r)) minePositions.push(r);
-  }
-
   for (let i = 0; i < 25; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
-    cell.onclick = () => clickCell(cell, i);
+    cell.onclick = () => openCell(i, cell);
     grid.appendChild(cell);
   }
 }
 
-function clickCell(cell, index) {
-  if (gameOver || cell.classList.contains("star")) return;
-
-  if (minePositions.includes(index)) {
-    cell.classList.add("mine");
-    cell.textContent = "💣";
-    gameOver = true;
-    balance -= bet;
-    balanceEl.textContent = balance;
-    revealMines();
-    setTimeout(() => alert("💥 Мина! Вы проиграли"), 300);
-  } else {
-    cell.classList.add("star");
-    cell.textContent = "⭐";
-    coef += mines === 10 ? 0.6 : mines === 5 ? 0.4 : 0.3;
-    coefEl.textContent = coef.toFixed(2);
-    winEl.textContent = Math.floor(bet * coef);
-  }
+function changeBet(v) {
+  if (gameActive) return;
+  bet += v;
+  if (bet < 10) bet = 10;
+  if (bet > balance) bet = balance;
+  updateUI();
 }
 
-function revealMines() {
-  document.querySelectorAll(".cell").forEach((c,i)=>{
-    if (minePositions.includes(i) && !c.classList.contains("mine")) {
-      c.classList.add("mine");
-      c.textContent="💣";
-    }
-  });
+function setMines(v) {
+  if (gameActive) return;
+  mineCount = v;
+}
+
+function startGame() {
+  if (gameActive) return;
+  if (bet > balance) return alert("Недостаточно средств");
+
+  balance -= bet;
+  localStorage.setItem("balance", balance);
+
+  coef = 1.00;
+  win = 0;
+  mines.clear();
+  opened.clear();
+
+  while (mines.size < mineCount) {
+    mines.add(Math.floor(Math.random() * 25));
+  }
+
+  gameActive = true;
+  renderGrid();
+  updateUI();
+}
+
+function openCell(i, cell) {
+  if (!gameActive || opened.has(i)) return;
+
+  if (mines.has(i)) {
+    cell.classList.add("mine");
+    endGame(false);
+    return;
+  }
+
+  opened.add(i);
+  cell.classList.add("safe");
+
+  coef += mineCount * 0.08;
+  win = bet * coef;
+  updateUI();
 }
 
 function cashOut() {
-  if (gameOver) return;
-  let win = Math.floor(bet * coef);
-  balance += win;
-  balanceEl.textContent = balance;
-  gameOver = true;
-  alert("💰 Вы выиграли " + win + " ₽");
+  if (!gameActive) return;
+  balance += Math.floor(win);
+  localStorage.setItem("balance", balance);
+  endGame(true);
 }
 
-function restart() {
-  started = false;
-  setup();
+function endGame() {
+  gameActive = false;
+  document.querySelectorAll(".cell").forEach((cell, i) => {
+    if (mines.has(i)) cell.classList.add("mine");
+  });
 }
 
-function changeMines() {
-  mines = Number(mineSelect.value);
-  restart();
-}
-function changeBet(value) {
-  if (started) return;
-
-  bet += value;
-
-  if (bet < 10) bet = 10;
-  if (bet > balance) bet = balance;
-
-  document.getElementById("bet").textContent = bet;
-}
-setup();
+renderGrid();
+updateUI();
 
 
 
