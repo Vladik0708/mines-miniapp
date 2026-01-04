@@ -8,7 +8,9 @@ body {
 }
 
 .game {
-  width: 320px;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
 }
 
 .top {
@@ -21,6 +23,11 @@ body {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
+
+  width: 100%;
+  max-width: 300px;
+
+  margin: 15px auto;
 }
 
 .cell {
@@ -79,3 +86,4 @@ button {
   border-radius: 8px;
   font-size: 16px;
 }
+
