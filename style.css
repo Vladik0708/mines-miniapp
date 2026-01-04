@@ -22,13 +22,21 @@ body {
 .top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
+}
+
+select {
+  background: #2b3b55;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  padding: 4px 8px;
 }
 
 .balance {
   font-size: 14px;
   margin-bottom: 10px;
-  opacity: 0.9;
 }
 
 .grid {
@@ -64,8 +72,13 @@ body {
 }
 
 @keyframes boom {
-  0% {transform: scale(0.8);}
+  0% {transform: scale(0.7);}
   100% {transform: scale(1.1);}
+}
+
+.win {
+  margin-top: 10px;
+  font-size: 15px;
 }
 
 .buttons {
