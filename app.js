@@ -80,16 +80,18 @@ function changeMines() {
   mines = Number(mineSelect.value);
   restart();
 }
-function changeBet(amount) {
+function changeBet(value) {
   if (started) return;
 
-  bet += amount;
+  bet += value;
+
   if (bet < 10) bet = 10;
   if (bet > balance) bet = balance;
 
   document.getElementById("bet").textContent = bet;
 }
 setup();
+
 
 
 
