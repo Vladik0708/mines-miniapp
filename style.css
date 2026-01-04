@@ -1,74 +1,88 @@
-body {
-  background: #0e1621;
-  font-family: Arial, sans-serif;
-  color: white;
+const grid = document.getElementById('grid');
+const winText = document.getElementById('win');
+const balanceText = document.getElementById('balance');
+const betText = document.getElementById('bet');
+
+let balance = 1000;
+let bet = 10;
+let minesCount = 3;
+let mines = [];
+let opened = 0;
+let gameOver = false;
+
+document.getElementById('betPlus').onclick = () => {
+  if (!gameOver) bet += 10;
+  betText.textContent = bet;
+};
+
+document.getElementById('betMinus').onclick = () => {
+  if (!gameOver && bet > 10) bet -= 10;
+  betText.textContent = bet;
+};
+
+document.getElementById('restart').onclick = startGame;
+document.getElementById('cashout').onclick = cashOut;
+
+function startGame() {
+  if (balance < bet) return alert('Недостаточно средств');
+
+  balance -= bet;
+  balanceText.textContent = balance;
+
+  gameOver = false;
+  opened = 0;
+  winText.textContent = '1.00x';
+
+  grid.innerHTML = '';
+  mines = [];
+
+  while (mines.length < minesCount) {
+    let r = Math.floor(Math.random() * 25);
+    if (!mines.includes(r)) mines.push(r);
+  }
+
+  for (let i = 0; i < 25; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.onclick = () => openCell(i, cell);
+    grid.appendChild(cell);
+  }
 }
 
-.game {
-  width: 300px;
-  margin: auto;
-  background: #17212b;
-  padding: 15px;
-  border-radius: 16px;
+function openCell(i, cell) {
+  if (gameOver || cell.classList.contains('open')) return;
+
+  cell.classList.add('open');
+
+  if (mines.includes(i)) {
+    cell.classList.add('mine');
+    gameOver = true;
+    revealMines();
+    setTimeout(() => alert('💥 Mine! You lost'), 200);
+  } else {
+    cell.classList.add('safe');
+    opened++;
+    winText.textContent = (1 + opened * 0.2).toFixed(2) + 'x';
+  }
 }
 
-.top, .bank {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+function revealMines() {
+  [...grid.children].forEach((cell, i) => {
+    if (mines.includes(i)) {
+      cell.classList.add('mine');
+    }
+  });
 }
 
-.bet button {
-  width: 30px;
+function cashOut() {
+  if (gameOver || opened === 0) return;
+
+  const win = Math.floor(bet * parseFloat(winText.textContent));
+  balance += win;
+  balanceText.textContent = balance;
+  gameOver = true;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin: 15px 0;
-}
-
-.cell {
-  height: 45px;
-  background: #243447;
-  border-radius: 8px;
-  cursor: pointer;
-  position: relative;
-}
-
-.cell.safe {
-  background: #2ecc71;
-}
-
-.cell.mine::after {
-  content: "💣";
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 22px;
-  animation: boom 0.3s ease-out;
-}
-
-@keyframes boom {
-  from { transform: scale(0); opacity: 0 }
-  to { transform: scale(1); opacity: 1 }
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-}
-
-button {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
 
 
 
