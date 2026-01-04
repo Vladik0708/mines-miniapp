@@ -1,37 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Mines</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <h2>💣 Mines</h2>
-
-  <div id="controls">
-    <button onclick="startGame(3)">3 💣</button>
-    <button onclick="startGame(5)">5 💣</button>
-  </div>
-
-  <div id="grid"></div>
-
-  <button id="cashout" onclick="cashout()" hidden>💰 Cashout</button>
-
-  <script src="app.js"></script>
-</body>
-
-</html>
 
 <div class="panel">
-  <div>Balance: <span id="balance">1000</span></div>
+  <div>💰 Balance: <span id="balance">1000</span></div>
 
   <div class="bet">
-    <button onclick="changeBet(-10)">-</button>
+    <button onclick="changeBet(-10)">−</button>
     <span id="bet">10</span>
     <button onclick="changeBet(10)">+</button>
   </div>
 
-  <button onclick="cashout()">💰 Cashout</button>
+  <button class="cashout" onclick="cashout()">Cash Out</button>
 </div>
 
+<div class="grid" id="grid"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
