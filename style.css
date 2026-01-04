@@ -27,3 +27,21 @@ body {
 
 .safe { background: #16a34a; }
 .mine { background: #dc2626; }
+
+.panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.bet button {
+  background: #1fa463;
+  border: none;
+  color: white;
+  font-size: 18px;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+}
