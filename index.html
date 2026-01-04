@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Mines</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Mines 1win</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="game">
 
   <div class="top">
-    💣 Мины:
-    <select id="mineSelect" onchange="changeMines()">
-      <option value="3">3</option>
-      <option value="5">5</option>
-      <option value="10">10</option>
-    </select>
-
-    ⭐ Коэф: <span id="coef">1.00</span>x
+    <span>Баланс: <b><span id="balance">1000</span> ₽</b></span>
+    <span>Коэф: <b>x<span id="coef">1.00</span></b></span>
   </div>
 
-  <div class="balance">
-    Баланс: <b><span id="balance">1000</span> ₽</b><br>
+  <div class="controls">
     <div class="bet-control">
-  <button onclick="changeBet(-10)">−</button>
-  <span id="bet">10</span> ₽
-  <button onclick="changeBet(10)">+</button>
-</div>
+      <button onclick="changeBet(-10)">−</button>
+      <span id="bet">10</span> ₽
+      <button onclick="changeBet(10)">+</button>
+    </div>
+
+    <div class="mines">
+      <button onclick="setMines(3)">3 💣</button>
+      <button onclick="setMines(5)">5 💣</button>
+      <button onclick="setMines(10)">10 💣</button>
+    </div>
+  </div>
 
   <div class="grid" id="grid"></div>
 
   <div class="win">
-    Выигрыш: <b><span id="win">0</span> ₽</b>
+    Выигрыш: <span id="win">0</span> ₽
   </div>
 
   <div class="buttons">
-    <button onclick="restart()">Рестарт</button>
+    <button onclick="startGame()">Играть</button>
     <button class="cash" onclick="cashOut()">Забрать</button>
   </div>
 
@@ -45,6 +44,7 @@
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
