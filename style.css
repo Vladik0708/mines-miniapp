@@ -1,47 +1,71 @@
 body {
-  background: #0f172a;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #0b132b, #000);
   color: white;
-  text-align: center;
-  font-family: Arial;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#grid {
+.panel {
+  width: 320px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.bet button,
+.cashout {
+  background: #1fa463;
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.bet span {
+  margin: 0 8px;
+}
+
+.grid {
   display: grid;
-  grid-template-columns: repeat(5, 60px);
-  gap: 6px;
-  justify-content: center;
-  margin: 20px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  width: 320px;
 }
 
 .cell {
   width: 60px;
   height: 60px;
-  background: #1e293b;
-  border-radius: 8px;
-  font-size: 24px;
+  background: linear-gradient(145deg, #1f2f46, #121c2b);
+  border-radius: 14px;
+  box-shadow:
+    inset 2px 2px 6px rgba(255,255,255,0.05),
+    inset -2px -2px 6px rgba(0,0,0,0.6),
+    0 4px 10px rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 22px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
-.safe { background: #16a34a; }
-.mine { background: #dc2626; }
-
-.panel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  color: white;
+.cell:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 12px rgba(0,180,255,0.6);
 }
 
-.bet button {
-  background: #1fa463;
-  border: none;
-  color: white;
-  font-size: 18px;
-  width: 35px;
-  height: 35px;
-  border-radius: 8px;
+.cell.safe {
+  background: radial-gradient(circle, #4dffb3, #1fa463);
+  box-shadow: 0 0 15px rgba(77,255,179,0.8);
 }
+
+.cell.mine {
+  background: radial-gradient(circle, #ff7b7b, #b00020);
+  box-shadow: 0 0 18px rgba(255,80,80,0.9);
+
