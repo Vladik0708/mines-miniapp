@@ -2,13 +2,17 @@ const grid = document.querySelector('.grid');
 const winEl = document.getElementById('win');
 const restartBtn = document.getElementById('restart');
 
+let cashBtn;
+
 const SIZE = 25;
 const MINES = 3;
+const BASE_MULTIPLIER = 1.15;
 
 let mines = [];
 let opened = 0;
 let multiplier = 1;
 let gameOver = false;
+let cashedOut = false;
 
 restartBtn.onclick = init;
 
@@ -18,7 +22,12 @@ function init() {
   opened = 0;
   multiplier = 1;
   gameOver = false;
+  cashedOut = false;
+
   winEl.textContent = '1.00x';
+
+  if (cashBtn) cashBtn.remove();
+  createCashOut();
 
   generateMines();
 
@@ -30,6 +39,14 @@ function init() {
   }
 }
 
+function createCashOut() {
+  cashBtn = document.createElement('button');
+  cashBtn.textContent = 'Cash Out';
+  cashBtn.style.background = '#2ecc71';
+  cashBtn.onclick = cashOut;
+  document.querySelector('.top').appendChild(cashBtn);
+}
+
 function generateMines() {
   while (mines.length < MINES) {
     const r = Math.floor(Math.random() * SIZE);
@@ -38,7 +55,7 @@ function generateMines() {
 }
 
 function openCell(index, cell) {
-  if (gameOver || cell.classList.contains('open')) return;
+  if (gameOvercell.classList.contains('open')) return;
 
   cell.classList.add('open');
 
@@ -46,8 +63,8 @@ function openCell(index, cell) {
     cell.classList.add('mine');
     cell.textContent = '💣';
     gameOver = true;
-    alert('💥 Mine! You lost');
     revealMines();
+    setTimeout(() => alert('💥 Mine! You lost'), 100);
     return;
   }
 
@@ -55,8 +72,20 @@ function openCell(index, cell) {
   cell.textContent = '⭐';
 
   opened++;
-  multiplier += 0.15;
+  multiplier *= BASE_MULTIPLIER;
   winEl.textContent = multiplier.toFixed(2) + 'x';
+}
+
+function cashOut() {
+  if (gameOver || opened === 0) return;
+
+  cashedOut = true;
+  cashBtn.textContent = '✔ Cashed';
+  cashBtn.disabled = true;
+  cashBtn.style.background = '#888';
+
+  revealMines();
+  setTimeout(() => alert(`💰 You won x${multiplier.toFixed(2)}`), 150);
 }
 
 function revealMines() {
@@ -69,6 +98,7 @@ function revealMines() {
 }
 
 init();
+
 
 
 
