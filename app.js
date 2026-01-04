@@ -1,4 +1,9 @@
-let balance = Number(localStorage.getItem('balance')) || 5000;
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.expand();
+  Telegram.WebApp.disableVerticalSwipes();
+}
+
+let balance = Number(localStorage.getItem('balance')) || 1000;
 let bet = 10;
 let mineCount = 3;
 let coef = 1.00;
@@ -11,8 +16,7 @@ let gameActive = false;
 const grid = document.getElementById("grid");
 
 function updateUI() {
-  balance = Math.floor(balance);
-  document.getElementById("balance").textContent = balance;
+  document.getElementById("balance").textContent = Math.floor(balance);
   document.getElementById("bet").textContent = bet;
   document.getElementById("coef").textContent = coef.toFixed(2);
   document.getElementById("win").textContent = Math.floor(win);
@@ -67,7 +71,7 @@ function openCell(i, cell) {
 
   if (mines.has(i)) {
     cell.classList.add("mine");
-    endGame(false);
+    endGame();
     return;
   }
 
@@ -83,7 +87,7 @@ function cashOut() {
   if (!gameActive) return;
   balance += Math.floor(win);
   localStorage.setItem("balance", balance);
-  endGame(true);
+  endGame();
 }
 
 function endGame() {
@@ -95,6 +99,7 @@ function endGame() {
 
 renderGrid();
 updateUI();
+
 
 
 
