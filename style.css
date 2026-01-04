@@ -1,15 +1,24 @@
-body {
+html, body {
+  width: 100%;
+  height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: radial-gradient(ellipse at top, #14233a 0%, #0b1324 60%);
   color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
 }
 
 .game {
-  max-width: 360px;
-  margin: 20px auto;
+  width: 100%;
+  height: 100%;
+  max-width: 420px;
   padding: 16px;
-  border-radius: 22px;
   background: linear-gradient(180deg, #1b2f4d, #13233a);
   box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
