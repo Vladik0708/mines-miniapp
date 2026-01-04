@@ -1,6 +1,8 @@
 const grid = document.getElementById("grid");
 
-let balance = 1000;
+let balance = localStorage.getItem("balance")
+  ? Number(localStorage.getItem("balance"))
+  : 1000;
 let bet = 10;
 let multiplier = 1;
 let opened = 0;
@@ -33,7 +35,10 @@ function onCellClick(cell, index) {
     cell.classList.add("mine");
     cell.textContent = "💣";
     balance -= bet;
-    updateBalance();
+   function updateBalance() {
+  document.getElementById("balance").textContent = balance;
+  localStorage.setItem("balance", balance);
+}
     alert("💥 Mine! You lost");
     startGame();
   } else {
@@ -66,3 +71,4 @@ function updateBalance() {
 
 updateBalance();
 startGame();
+
