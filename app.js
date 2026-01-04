@@ -7,6 +7,7 @@ const mineSelect = document.getElementById("mineSelect");
 let mines = 3;
 let balance = 1000;
 let bet = 10;
+let started = false;
 let coef = 1;
 let gameOver = false;
 let minePositions = [];
@@ -71,6 +72,7 @@ function cashOut() {
 }
 
 function restart() {
+  started = false;
   setup();
 }
 
@@ -78,8 +80,17 @@ function changeMines() {
   mines = Number(mineSelect.value);
   restart();
 }
+function changeBet(amount) {
+  if (started) return;
 
+  bet += amount;
+  if (bet < 10) bet = 10;
+  if (bet > balance) bet = balance;
+
+  document.getElementById("bet").textContent = bet;
+}
 setup();
+
 
 
 
