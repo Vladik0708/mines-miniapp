@@ -1,6 +1,8 @@
 const grid = document.getElementById("grid");
 const coefEl = document.getElementById("coef");
 const balanceEl = document.getElementById("balance");
+const winEl = document.getElementById("win");
+const mineSelect = document.getElementById("mineSelect");
 
 let mines = 3;
 let balance = 1000;
@@ -14,6 +16,7 @@ function setup() {
   gameOver = false;
   coef = 1;
   coefEl.textContent = coef.toFixed(2);
+  winEl.textContent = "0";
 
   minePositions = [];
   while (minePositions.length < mines) {
@@ -38,13 +41,14 @@ function clickCell(cell, index) {
     gameOver = true;
     balance -= bet;
     balanceEl.textContent = balance;
-    setTimeout(()=>alert("💥 Mine! You lost"),300);
     revealMines();
+    setTimeout(() => alert("💥 Мина! Вы проиграли"), 300);
   } else {
     cell.classList.add("star");
     cell.textContent = "⭐";
-    coef += 0.3;
+    coef += mines === 10 ? 0.6 : mines === 5 ? 0.4 : 0.3;
     coefEl.textContent = coef.toFixed(2);
+    winEl.textContent = Math.floor(bet * coef);
   }
 }
 
@@ -59,17 +63,24 @@ function revealMines() {
 
 function cashOut() {
   if (gameOver) return;
-  balance += Math.floor(bet * coef);
+  let win = Math.floor(bet * coef);
+  balance += win;
   balanceEl.textContent = balance;
   gameOver = true;
-  alert("💰 You won!");
+  alert("💰 Вы выиграли " + win + " ₽");
 }
 
 function restart() {
   setup();
 }
 
+function changeMines() {
+  mines = Number(mineSelect.value);
+  restart();
+}
+
 setup();
+
 
 
 
