@@ -66,5 +66,14 @@ button {
   50% { transform: scale(1.25); }
   100% { transform: scale(1); }
 }
+* {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.cell {
+  pointer-events: auto;
+  cursor: pointer;
+}
 
 
