@@ -1,86 +1,90 @@
-const grid = document.getElementById('grid');
-const winText = document.getElementById('win');
-const balanceText = document.getElementById('balance');
-const betText = document.getElementById('bet');
-
-let balance = 1000;
-let bet = 10;
-let minesCount = 3;
-let mines = [];
-let opened = 0;
-let gameOver = false;
-
-document.getElementById('betPlus').onclick = () => {
-  if (!gameOver) bet += 10;
-  betText.textContent = bet;
-};
-
-document.getElementById('betMinus').onclick = () => {
-  if (!gameOver && bet > 10) bet -= 10;
-  betText.textContent = bet;
-};
-
-document.getElementById('restart').onclick = startGame;
-document.getElementById('cashout').onclick = cashOut;
-
-function startGame() {
-  if (balance < bet) return alert('Недостаточно средств');
-
-  balance -= bet;
-  balanceText.textContent = balance;
-
-  gameOver = false;
-  opened = 0;
-  winText.textContent = '1.00x';
-
-  grid.innerHTML = '';
-  mines = [];
-
-  while (mines.length < minesCount) {
-    let r = Math.floor(Math.random() * 25);
-    if (!mines.includes(r)) mines.push(r);
-  }
-
-  for (let i = 0; i < 25; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.onclick = () => openCell(i, cell);
-    grid.appendChild(cell);
-  }
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-function openCell(i, cell) {
-  if (gameOver || cell.classList.contains('open')) return;
-
-  cell.classList.add('open');
-
-  if (mines.includes(i)) {
-    cell.classList.add('mine');
-    gameOver = true;
-    revealMines();
-    setTimeout(() => alert('💥 Mine! You lost'), 200);
-  } else {
-    cell.classList.add('safe');
-    opened++;
-    winText.textContent = (1 + opened * 0.2).toFixed(2) + 'x';
-  }
+body {
+  margin: 0;
+  background: #0b1220;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
 }
 
-function revealMines() {
-  [...grid.children].forEach((cell, i) => {
-    if (mines.includes(i)) {
-      cell.classList.add('mine');
-    }
-  });
+.game {
+  background: linear-gradient(180deg,#1a2a44,#0e1729);
+  padding: 16px;
+  border-radius: 16px;
+  width: 320px;
+  color: #fff;
 }
 
-function cashOut() {
-  if (gameOver || opened === 0) return;
+.top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
 
-  const win = Math.floor(bet * parseFloat(winText.textContent));
-  balance += win;
-  balanceText.textContent = balance;
-  gameOver = true;
+.balance {
+  font-size: 14px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 8px;
+}
+
+.cell {
+  width: 56px;
+  height: 56px;
+  background: #2b3b55;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cell:hover {
+  transform: scale(1.05);
+}
+
+.star {
+  background: #1f7a4d;
+}
+
+.mine {
+  background: #7a1f1f;
+  animation: boom 0.3s ease;
+}
+
+@keyframes boom {
+  0% {transform: scale(0.8);}
+  100% {transform: scale(1.1);}
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.cash {
+  background: #1f7a4d;
+  color: #fff;
 }
 
 
