@@ -1,119 +1,84 @@
-const grid = document.getElementById("grid");
-let minesCount = 3;
-let balance = localStorage.getItem("balance")
-  ? Number(localStorage.getItem("balance"))
-  : 1000;
-let bet = 10;
-let multiplier = 1,0 ;
-let opened = 0;
-let mines = [];
-
-function startGame() {
-  grid.innerHTML = "";
-  mines = [];
-  multiplier = 1;
-  opened = 0;
-
-  while (mines.length < minesCount) {
-    const i = Math.floor(Math.random() * 25);
-    if (!mines.includes(i)) mines.push(i);
-  }
-
-  for (let i = 0; i < 25; i++) {
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.dataset.mine = "false";
-
-    cell.addEventListener("click", () => onCellClick(cell, i));
-    grid.appendChild(cell);
-    if (cell.dataset.mine === "true") {
-    cell.classList.add("mine");
-    showAllMines();
-    alert("💥 Mine! You lost");
-    return;
-  }
+body {
+  background: #0f172a;
+  font-family: Arial, sans-serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
 }
 
-function onCellClick(cell, index) {
-  if (cell.classList.contains("safe") || cell.classList.contains("mine")) return;
-
-  if (mines.includes(index)) {
-    cell.classList.add("mine");
-    cell.textContent = "💣";
-    cell.style.pointerEvents = "none";
-    balance -= bet;
-   function updateBalance() {
-  document.getElementById("multiplier").textContent = multiplier ;
-  localStorage.setItem("balance", balance);
-}
-    alert("💥 Mine! You lost");
-    startGame();
-  } else {
-    cell.classList.add("safe");
-    cell.textContent = "⭐";
-  opened++;
-multiplier = calculateMultiplier(opened, minesCount);
-  }
+.game {
+  width: 320px;
 }
 
-function changeBet(value) {
-  if (bet + value > 0 && bet + value <= balance) {
-    bet += value;
-    document.getElementById("multiplier").textContent = "1.00" ;
-  }
+.top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-function cashout() {
-  if (opened === 0) return;
-  const win = Math.floor(bet * multiplier);
-  balance += win;
-  updateBalance();
-  alert(`💰 You won ${win}`);
-  startGame();
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
 }
 
-function updateBalance() {
-  document.getElementById("balance").textContent = balance;
+.cell {
+  width: 55px;
+  height: 55px;
+  background: #1e293b;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  transition: transform .15s;
 }
 
-updateBalance();
-startGame();
-
-function setMines(count) {
-  minesCount = count;
-
-  document.querySelectorAll(".mines button").forEach(btn =>
-    btn.classList.remove("active")
-  );
-
-  event.target.classList.add("active");
-  startGame();
+.cell:hover {
+  transform: scale(1.05);
 }
-function calculateMultiplier(opened, minesCount) {
-  const totalCells = 25;
-  let multiplier = 1;
 
-  for (let i = 0; i < opened; i++) {
-    multiplier *= totalCells / (totalCells - minesCount - i);
-  }
+.cell.star {
+  background: #22c55e;
+  box-shadow: 0 0 15px #22c55e;
+}
 
-  return multiplier.toFixed(2);
+.cell.star::after {
+  content: "⭐";
+  font-size: 26px;
+  position: absolute;
+  top: 12px;
+  left: 14px;
 }
-let cells = document.querySelectorAll(".cell");
-let minesPlaced = 0;
 
-while (minesPlaced < minesCount) {
-    let index = Math.floor(Math.random() * cells.length);
-    if (cells[index].dataset.mine === "false") {
-        cells[index].dataset.mine = "true";
-        minesPlaced++;
-    }
+.cell.mine {
+  background: #dc2626;
+  animation: explode .4s ease-out;
 }
-function showAllMines() {
-    document.querySelectorAll(".cell").forEach(c => {
-        if (c.dataset.mine === "true") {
-            c.classList.add("mine");
-        }
-    });
+
+.cell.mine::after {
+  content: "💣";
+  font-size: 26px;
+  position: absolute;
+  top: 12px;
+  left: 14px;
 }
+
+@keyframes explode {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  background: #2563eb;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+}
+}
+
 
