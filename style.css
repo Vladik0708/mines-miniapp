@@ -1,68 +1,75 @@
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
 body {
-  margin: 0;
-  background: #0b1220;
-  font-family: system-ui, -apple-system;
-  color: #fff;
+  background: #0e1621;
+  font-family: Arial, sans-serif;
+  color: white;
 }
 
 .game {
-  max-width: 360px;
-  margin: 20px auto;
-  padding: 16px;
-  background: #111c2f;
+  width: 300px;
+  margin: auto;
+  background: #17212b;
+  padding: 15px;
   border-radius: 16px;
 }
 
-.top {
+.top, .bank {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+}
+
+.bet button {
+  width: 30px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  gap: 8px;
+  margin: 15px 0;
 }
 
 .cell {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 10px;
+  height: 45px;
+  background: #243447;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.cell.safe {
+  background: #2ecc71;
+}
+
+.cell.mine::after {
+  content: "💣";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  animation: boom 0.3s ease-out;
+}
+
+@keyframes boom {
+  from { transform: scale(0); opacity: 0 }
+  to { transform: scale(1); opacity: 1 }
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
   border: none;
-  background: #2a3b55;
   cursor: pointer;
 }
 
-.cell.open.safe {
-  background: #3cb371;
-}
-
-.cell.open.mine {
-  background: #c0392b;
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-}
-
-.blue { background: #3498db; color: #fff; }
-.green { background: #2ecc71; color: #000; }
 
 
 
