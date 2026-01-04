@@ -1,87 +1,35 @@
-const grid = document.getElementById('grid');
-const winText = document.getElementById('win');
-const balanceText = document.getElementById('balance');
-const betText = document.getElementById('bet');
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Mines</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-let balance = 1000;
-let bet = 10;
-let minesCount = 3;
-let mines = [];
-let opened = 0;
-let gameOver = false;
+<div class="game">
+  <div class="top">
+    💣 Mines: <span id="mines">3</span>
+    ⭐ Win: <span id="coef">1.00</span>x
+  </div>
 
-document.getElementById('betPlus').onclick = () => {
-  if (!gameOver) bet += 10;
-  betText.textContent = bet;
-};
+  <div class="balance">
+    Balance: <span id="balance">1000</span> | Bet: <span id="bet">10</span>
+  </div>
 
-document.getElementById('betMinus').onclick = () => {
-  if (!gameOver && bet > 10) bet -= 10;
-  betText.textContent = bet;
-};
+  <div class="grid" id="grid"></div>
 
-document.getElementById('restart').onclick = startGame;
-document.getElementById('cashout').onclick = cashOut;
+  <div class="buttons">
+    <button onclick="restart()">Restart</button>
+    <button class="cash" onclick="cashOut()">Cash Out</button>
+  </div>
+</div>
 
-function startGame() {
-  if (balance < bet) return alert('Недостаточно средств');
+<script src="app.js"></script>
+</body>
+</html>
 
-  balance -= bet;
-  balanceText.textContent = balance;
-
-  gameOver = false;
-  opened = 0;
-  winText.textContent = '1.00x';
-
-  grid.innerHTML = '';
-  mines = [];
-
-  while (mines.length < minesCount) {
-    let r = Math.floor(Math.random() * 25);
-    if (!mines.includes(r)) mines.push(r);
-  }
-
-  for (let i = 0; i < 25; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.onclick = () => openCell(i, cell);
-    grid.appendChild(cell);
-  }
-}
-
-function openCell(i, cell) {
-  if (gameOver || cell.classList.contains('open')) return;
-
-  cell.classList.add('open');
-
-  if (mines.includes(i)) {
-    cell.classList.add('mine');
-    gameOver = true;
-    revealMines();
-    setTimeout(() => alert('💥 Mine! You lost'), 200);
-  } else {
-    cell.classList.add('safe');
-    opened++;
-    winText.textContent = (1 + opened * 0.2).toFixed(2) + 'x';
-  }
-}
-
-function revealMines() {
-  [...grid.children].forEach((cell, i) => {
-    if (mines.includes(i)) {
-      cell.classList.add('mine');
-    }
-  });
-}
-
-function cashOut() {
-  if (gameOver || opened === 0) return;
-
-  const win = Math.floor(bet * parseFloat(winText.textContent));
-  balance += win;
-  balanceText.textContent = balance;
-  gameOver = true;
-}
 
 
 
