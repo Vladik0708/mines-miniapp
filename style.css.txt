@@ -1,0 +1,29 @@
+body {
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  font-family: Arial;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  gap: 6px;
+  justify-content: center;
+  margin: 20px;
+}
+
+.cell {
+  width: 60px;
+  height: 60px;
+  background: #1e293b;
+  border-radius: 8px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.safe { background: #16a34a; }
+.mine { background: #dc2626; }

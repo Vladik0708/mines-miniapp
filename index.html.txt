@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Mines</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <h2>💣 Mines</h2>
+
+  <div id="controls">
+    <button onclick="startGame(3)">3 💣</button>
+    <button onclick="startGame(5)">5 💣</button>
+  </div>
+
+  <div id="grid"></div>
+
+  <button id="cashout" onclick="cashout()" hidden>💰 Cashout</button>
+
+  <script src="app.js"></script>
+</body>
+</html>
