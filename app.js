@@ -1,87 +1,75 @@
-const grid = document.getElementById('grid');
-const winText = document.getElementById('win');
-const balanceText = document.getElementById('balance');
-const betText = document.getElementById('bet');
+const grid = document.getElementById("grid");
+const coefEl = document.getElementById("coef");
+const balanceEl = document.getElementById("balance");
 
+let mines = 3;
 let balance = 1000;
 let bet = 10;
-let minesCount = 3;
-let mines = [];
-let opened = 0;
+let coef = 1;
 let gameOver = false;
+let minePositions = [];
 
-document.getElementById('betPlus').onclick = () => {
-  if (!gameOver) bet += 10;
-  betText.textContent = bet;
-};
-
-document.getElementById('betMinus').onclick = () => {
-  if (!gameOver && bet > 10) bet -= 10;
-  betText.textContent = bet;
-};
-
-document.getElementById('restart').onclick = startGame;
-document.getElementById('cashout').onclick = cashOut;
-
-function startGame() {
-  if (balance < bet) return alert('Недостаточно средств');
-
-  balance -= bet;
-  balanceText.textContent = balance;
-
+function setup() {
+  grid.innerHTML = "";
   gameOver = false;
-  opened = 0;
-  winText.textContent = '1.00x';
+  coef = 1;
+  coefEl.textContent = coef.toFixed(2);
 
-  grid.innerHTML = '';
-  mines = [];
-
-  while (mines.length < minesCount) {
+  minePositions = [];
+  while (minePositions.length < mines) {
     let r = Math.floor(Math.random() * 25);
-    if (!mines.includes(r)) mines.push(r);
+    if (!minePositions.includes(r)) minePositions.push(r);
   }
 
   for (let i = 0; i < 25; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.onclick = () => openCell(i, cell);
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.onclick = () => clickCell(cell, i);
     grid.appendChild(cell);
   }
 }
 
-function openCell(i, cell) {
-  if (gameOver || cell.classList.contains('open')) return;
+function clickCell(cell, index) {
+  if (gameOver || cell.classList.contains("star")) return;
 
-  cell.classList.add('open');
-
-  if (mines.includes(i)) {
-    cell.classList.add('mine');
+  if (minePositions.includes(index)) {
+    cell.classList.add("mine");
+    cell.textContent = "💣";
     gameOver = true;
+    balance -= bet;
+    balanceEl.textContent = balance;
+    setTimeout(()=>alert("💥 Mine! You lost"),300);
     revealMines();
-    setTimeout(() => alert('💥 Mine! You lost'), 200);
   } else {
-    cell.classList.add('safe');
-    opened++;
-    winText.textContent = (1 + opened * 0.2).toFixed(2) + 'x';
+    cell.classList.add("star");
+    cell.textContent = "⭐";
+    coef += 0.3;
+    coefEl.textContent = coef.toFixed(2);
   }
 }
 
 function revealMines() {
-  [...grid.children].forEach((cell, i) => {
-    if (mines.includes(i)) {
-      cell.classList.add('mine');
+  document.querySelectorAll(".cell").forEach((c,i)=>{
+    if (minePositions.includes(i) && !c.classList.contains("mine")) {
+      c.classList.add("mine");
+      c.textContent="💣";
     }
   });
 }
 
 function cashOut() {
-  if (gameOver || opened === 0) return;
-
-  const win = Math.floor(bet * parseFloat(winText.textContent));
-  balance += win;
-  balanceText.textContent = balance;
+  if (gameOver) return;
+  balance += Math.floor(bet * coef);
+  balanceEl.textContent = balance;
   gameOver = true;
+  alert("💰 You won!");
 }
+
+function restart() {
+  setup();
+}
+
+setup();
 
 
 
