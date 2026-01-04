@@ -1,79 +1,68 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   margin: 0;
-  background: #0e1621;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-family: Arial, sans-serif;
-  color: white;
+  background: #0b1220;
+  font-family: system-ui, -apple-system;
+  color: #fff;
 }
 
 .game {
-  background: #1c2b3a;
-  padding: 15px;
+  max-width: 360px;
+  margin: 20px auto;
+  padding: 16px;
+  background: #111c2f;
   border-radius: 16px;
-  width: 320px;
 }
 
 .top {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 12px;
-}
-
-button {
-  background: #2ea6ff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 
 .cell {
-  width: 52px;
-  height: 52px;
-  background: #2b4058;
+  width: 100%;
+  aspect-ratio: 1;
   border-radius: 10px;
+  border: none;
+  background: #2a3b55;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 26px;
-  transition: 0.2s;
 }
 
-.cell.open.star {
-  background: #2ecc71;
-  box-shadow: 0 0 12px #2ecc71;
+.cell.open.safe {
+  background: #3cb371;
 }
 
 .cell.open.mine {
-  background: #e74c3c;
-  animation: boom 0.4s;
+  background: #c0392b;
 }
 
-@keyframes boom {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.25); }
-  100% { transform: scale(1); }
-}
-* {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
 }
 
-.cell {
-  pointer-events: auto;
-  cursor: pointer;
+.btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
 }
+
+.blue { background: #3498db; color: #fff; }
+.green { background: #2ecc71; color: #000; }
+
 
 
