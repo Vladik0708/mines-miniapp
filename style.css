@@ -69,3 +69,16 @@ body {
   background: radial-gradient(circle, #ff7b7b, #b00020);
   box-shadow: 0 0 18px rgba(255,80,80,0.9);
 
+.mines button {
+  background: #1f2f46;
+  border: 1px solid #2f4a6a;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 8px;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.mines button.active {
+  background: #ff9800;
+}
