@@ -1,4 +1,4 @@
-let balance = Number(localStorage.getItem('balance')) || 1000;
+let balance = Number(localStorage.getItem('balance')) || 5000;
 let bet = 10;
 let mineCount = 3;
 let coef = 1.00;
@@ -95,6 +95,7 @@ function endGame() {
 
 renderGrid();
 updateUI();
+
 
 
 
