@@ -62,3 +62,21 @@ function cashout() {
   active = false;
 }
 
+function changeBet(value) {
+  if (bet + value > 0 && bet + value <= balance) {
+    bet += value;
+    document.getElementById("bet").textContent = bet;
+  }
+}
+
+function cashout() {
+  const win = Math.floor(bet * multiplier);
+  balance += win;
+  updateBalance();
+  alert(`💰 You won ${win}`);
+  resetGame();
+}
+
+function updateBalance() {
+  document.getElementById("balance").textContent = balance;
+}
