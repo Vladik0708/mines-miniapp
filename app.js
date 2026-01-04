@@ -7,19 +7,19 @@ let balance = Number(localStorage.getItem('balance')) || 1000;
 let bet = 10;
 let mineCount = 3;
 let coef = 1.00;
-let win = 0;
 
 let mines = new Set();
 let opened = new Set();
 let gameActive = false;
 
 const grid = document.getElementById("grid");
+const winEl = document.getElementById("win");
+const winBox = document.querySelector(".win");
 
 function updateUI() {
   document.getElementById("balance").textContent = Math.floor(balance);
   document.getElementById("bet").textContent = bet;
   document.getElementById("coef").textContent = coef.toFixed(2);
-  document.getElementById("win").textContent = Math.floor(win);
 }
 
 function renderGrid() {
@@ -53,14 +53,14 @@ function startGame() {
   localStorage.setItem("balance", balance);
 
   coef = 1.00;
-  win = 0;
-  mines.clear();
   opened.clear();
+  mines.clear();
 
   while (mines.size < mineCount) {
     mines.add(Math.floor(Math.random() * 25));
   }
 
+  winEl.textContent = 0;
   gameActive = true;
   renderGrid();
   updateUI();
@@ -79,14 +79,20 @@ function openCell(i, cell) {
   cell.classList.add("safe");
 
   coef += mineCount * 0.08;
-  win = bet * coef;
+  const profit = bet * coef - bet;
+
+  balance += profit;
+  localStorage.setItem("balance", balance);
+
+  winEl.textContent = Math.floor(profit);
+  winBox.classList.add("pop");
+  setTimeout(() => winBox.classList.remove("pop"), 150);
+
   updateUI();
 }
 
 function cashOut() {
   if (!gameActive) return;
-  balance += Math.floor(win);
-  localStorage.setItem("balance", balance);
   endGame();
 }
 
