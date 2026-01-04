@@ -99,6 +99,23 @@ button {
   background: #1f7a4d;
   color: #fff;
 }
+.bet-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.bet-control button {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: #324a6d;
+  color: #fff;
+  font-size: 20px;
+}
 
 
 
