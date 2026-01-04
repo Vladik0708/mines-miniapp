@@ -1,41 +1,87 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <title>Mines</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+const grid = document.getElementById('grid');
+const winText = document.getElementById('win');
+const balanceText = document.getElementById('balance');
+const betText = document.getElementById('bet');
 
-<div class="game">
+let balance = 1000;
+let bet = 10;
+let minesCount = 3;
+let mines = [];
+let opened = 0;
+let gameOver = false;
 
-  <div class="top">
-    <div>💣 Mines: <span id="minesCount">3</span></div>
-    <div>⭐ Win: <span id="win">1.00x</span></div>
-  </div>
+document.getElementById('betPlus').onclick = () => {
+  if (!gameOver) bet += 10;
+  betText.textContent = bet;
+};
 
-  <div class="bank">
-    <div>💰 Balance: <span id="balance">1000</span></div>
+document.getElementById('betMinus').onclick = () => {
+  if (!gameOver && bet > 10) bet -= 10;
+  betText.textContent = bet;
+};
 
-    <div class="bet">
-      <button id="betMinus">−</button>
-      <span id="bet">10</span>
-      <button id="betPlus">+</button>
-    </div>
-  </div>
+document.getElementById('restart').onclick = startGame;
+document.getElementById('cashout').onclick = cashOut;
 
-  <div id="grid" class="grid"></div>
+function startGame() {
+  if (balance < bet) return alert('Недостаточно средств');
 
-  <div class="controls">
-    <button id="restart">Restart</button>
-    <button id="cashout">Cash Out</button>
-  </div>
+  balance -= bet;
+  balanceText.textContent = balance;
 
-</div>
+  gameOver = false;
+  opened = 0;
+  winText.textContent = '1.00x';
 
-<script src="app.js"></script>
-</body>
-</html>
+  grid.innerHTML = '';
+  mines = [];
+
+  while (mines.length < minesCount) {
+    let r = Math.floor(Math.random() * 25);
+    if (!mines.includes(r)) mines.push(r);
+  }
+
+  for (let i = 0; i < 25; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.onclick = () => openCell(i, cell);
+    grid.appendChild(cell);
+  }
+}
+
+function openCell(i, cell) {
+  if (gameOver || cell.classList.contains('open')) return;
+
+  cell.classList.add('open');
+
+  if (mines.includes(i)) {
+    cell.classList.add('mine');
+    gameOver = true;
+    revealMines();
+    setTimeout(() => alert('💥 Mine! You lost'), 200);
+  } else {
+    cell.classList.add('safe');
+    opened++;
+    winText.textContent = (1 + opened * 0.2).toFixed(2) + 'x';
+  }
+}
+
+function revealMines() {
+  [...grid.children].forEach((cell, i) => {
+    if (mines.includes(i)) {
+      cell.classList.add('mine');
+    }
+  });
+}
+
+function cashOut() {
+  if (gameOver || opened === 0) return;
+
+  const win = Math.floor(bet * parseFloat(winText.textContent));
+  balance += win;
+  balanceText.textContent = balance;
+  gameOver = true;
+}
 
 
 
