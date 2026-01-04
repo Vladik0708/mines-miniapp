@@ -1,9 +1,10 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-let mines = [];
-let opened = [];
-let active = false;
+let balance = 1000;
+let bet = 10;
+let multiplier = 1;
+let opened = 0;
 
 function startGame(count) {
   opened = [];
@@ -60,3 +61,4 @@ function cashout() {
   alert("💰 Cashout x" + coef);
   active = false;
 }
+
